@@ -7,8 +7,13 @@ namespace knk
   template < class T >
   class Vector
   {
-    T* data;
-    size_t size, capacity;
+  public:
+    ~Vector();
+    Vector();
+
+  private:
+    T* data_;
+    size_t size_, capacity_;
   };
 }
 
