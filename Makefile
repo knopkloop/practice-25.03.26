@@ -8,6 +8,6 @@ $(UNIT_TESTS): $(OBJS)
 	$(CXX) -o $@ $^
 
 clean:
-	$(RM) $(UNIT_TESTS) $(OBJS) $(DEPS)
+	-@$(RM) $(UNIT_TESTS) $(DEPS) $(OBJS)
 
---include main.d
+-include main.d
