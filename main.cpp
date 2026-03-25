@@ -28,7 +28,7 @@ bool testSizeOfNonEmptyVector(const char ** pname)
 {
   *pname = __func__;
   constexpr size_t size = 2;
-  Vector< int > v(size, 5);
+  Vector< int > v(size, 10);
   return v.getSize() == size;
 }
 
@@ -37,10 +37,10 @@ int main()
   using test_t = bool(*)(const char **);
   using case_t = std::pair< test_t, const char * >;
   case_t tests[] = {
-    {testConstructAndDestruct, "Vector must be default constructable"},
-    {testDefaultVectorIsEmpty, "Default constructed vector must be empty"},
-    {testSizeOfEmptyVector, "Size of empty vector must be zero"},
-    {testSizeOfNonEmptyVector, "Size of non-empty vector must be positive"}
+    { testConstructAndDestruct, "Vector must be default constructable" },
+    { testDefaultVectorIsEmpty, "Default constructed vector must be empty" },
+    { testSizeOfEmptyVector, "Size of empty vector must be zero" },
+    { testSizeOfNonEmptyVector, "Size of non-empty vector must be positive" }
   };
 
   constexpr size_t count = sizeof(tests) / sizeof(case_t);

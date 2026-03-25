@@ -13,6 +13,7 @@ namespace knk
     explicit Vector(size_t size);
     Vector(size_t size, const T& value);
 
+    Vector(const Vector< T >& rhs) = delete;
     Vector< T >& operator=(const Vector< T >& rhs) = delete;
 
     bool isEmpty() const noexcept;
