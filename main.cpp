@@ -47,6 +47,23 @@ bool testCapacityOfVectorAfterConstruct(const char ** pname)
   return v.getCapacity() == size;
 }
 
+bool testPushBackOnEmptyVector(const char ** pname)
+{
+  *pname = __func__;
+  Vector< int > v;
+  v.pushBack(2);
+  return v.getSize() == 1 && !v.isEmpty();
+}
+
+bool testPushBackOnNonEmptyVector(const char ** pname)
+{
+  *pname = __func__;
+  constexpr size_t size = 5;
+  Vector< int > v(size, 2);
+  v.pushBack(12);
+  return v.getSize() == size + 1;
+}
+
 int main()
 {
   using test_t = bool(*)(const char **);
@@ -57,7 +74,9 @@ int main()
     { testSizeOfEmptyVector, "Size of empty vector must be zero" },
     { testSizeOfNonEmptyVector, "Size of non-empty vector must be positive" },
     { testCapacityOfEmptyVector, "Empty vector capacity must be zero" },
-    { testCapacityOfVectorAfterConstruct, "Capacity after construction must equal size" }
+    { testCapacityOfVectorAfterConstruct, "Capacity after construction must equal size" },
+    { testPushBackOnEmptyVector, "size of empty vector after pushBack must be 1" },
+    { testPushBackOnNonEmptyVector, "size of non-empty vector after pushBack must increase" }
   };
 
   constexpr size_t count = sizeof(tests) / sizeof(case_t);

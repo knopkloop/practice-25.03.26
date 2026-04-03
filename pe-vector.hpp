@@ -77,4 +77,10 @@ size_t knk::Vector< T >::getCapacity() const noexcept
   return capacity_;
 }
 
+template< class T >
+void knk::Vector< T >::pushBack(const T& rhs)
+{
+  (void)rhs;
+}
+
 #endif
