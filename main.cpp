@@ -32,6 +32,21 @@ bool testSizeOfNonEmptyVector(const char ** pname)
   return v.getSize() == size;
 }
 
+bool testCapacityOfEmptyVector(const char ** pname)
+{
+  *pname = __func__;
+  Vector< int > v;
+  return v.getCapacity() == 0;
+}
+
+bool testCapacityOfVectorAfterConstruct(const char ** pname)
+{
+  *pname = __func__;
+  constexpr size_t size = 5;
+  Vector< int > v(size, 10);
+  return v.getCapacity() == size;
+}
+
 int main()
 {
   using test_t = bool(*)(const char **);
@@ -40,7 +55,9 @@ int main()
     { testConstructAndDestruct, "Vector must be default constructable" },
     { testDefaultVectorIsEmpty, "Default constructed vector must be empty" },
     { testSizeOfEmptyVector, "Size of empty vector must be zero" },
-    { testSizeOfNonEmptyVector, "Size of non-empty vector must be positive" }
+    { testSizeOfNonEmptyVector, "Size of non-empty vector must be positive" },
+    { testCapacityOfEmptyVector, "Empty vector capacity must be zero" },
+    { testCapacityOfVectorAfterConstruct, "Capacity after construction must equal size" }
   };
 
   constexpr size_t count = sizeof(tests) / sizeof(case_t);

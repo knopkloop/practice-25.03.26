@@ -18,9 +18,8 @@ namespace knk
 
     bool isEmpty() const noexcept;
     size_t getSize() const noexcept;
-
-    //РЕАЛИЗОВАТЬ + ПРОТЕСТИРОВАТЬ
     size_t getCapacity() const noexcept;
+
     void pushBack(const T& rhs);
     void popBack();
 
@@ -70,6 +69,12 @@ template< class T >
 size_t knk::Vector< T >::getSize() const noexcept
 {
   return size_;
+}
+
+template< class T >
+size_t knk::Vector< T >::getCapacity() const noexcept
+{
+  return 0;
 }
 
 #endif
