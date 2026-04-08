@@ -78,12 +78,37 @@ knk::Vector< T >::Vector(const Vector< T >& rhs):
 template< class T >
 T& knk::Vector< T >::at(size_t id)
 {
-  if (getSize() < id)
-  {
-    return data_[id];
-  }
-  throw std::out_of_range("id out of bound");
+  const Vector< T >* cthis = this;
+  const T& cr = cthis->at(id);
+  T& r = const_cast< T& >(cr);
+  return r;
 }
+
+template< class T >
+const T& knk::Vector< T >::at(size_t id) const
+{
+  if (id < getSize())
+  {
+    return (*this)[id];
+  }
+  throw std::out_of_range("id is out of bound");
+}
+
+template< class T >
+T& knk::Vector< T >::operator[](size_t id) noexcept
+{
+  const Vector< T >* cthis = this;
+  const T& cr = (*cthis)[id];
+  T& r = const_cast< T& >(cr);
+  return r;
+}
+
+template< class T >
+const T& knk::Vector< T >::operator[](size_t id) const noexcept
+{
+  return data_[id];
+}
+
 
 template< class T >
 bool knk::Vector< T >::isEmpty() const noexcept
