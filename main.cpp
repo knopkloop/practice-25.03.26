@@ -1,5 +1,6 @@
 #include "pe-vector.hpp"
 #include <iostream>
+#include <cstring>
 
 using knk::Vector;
 
@@ -88,6 +89,73 @@ bool testPopBackOnNonEmptyVector(const char ** pname)
   return v.getSize() == size - 1;
 }
 
+bool testElementCheckedAccess(const char ** pname)
+{
+  *pname = __func__;
+  Vector< int > v;
+  v.pushBack(2);
+  try
+  {
+    int& r = v.at(0);
+    return r == 2;
+  }
+  catch(...)
+  {
+    return false;
+  }
+}
+
+bool testElementCheckedOutOfBoundAccess(const char ** pname)
+{
+  *pname = __func__;
+  Vector< int > v;
+  try
+  {
+    v.at(0);
+  }
+  catch(const std::out_of_range &e)
+  {
+    const char* text = e.what();
+    return !std::strcmp("id is out of bound", text);
+    return true;
+  }
+  catch(...)
+  {
+    return false;
+  }
+}
+
+bool testCopyConstructor(const char ** pname)
+{
+  *pname = __func__;
+  Vector< int > v;
+  v.pushBack(1);
+  v.pushBack(2);
+
+  Vector< int > yav = v;
+
+  if(!v.isEmpty() && !yav.isEmpty())
+  {
+    throw std::logic_error("Vectors is expected to be non-empty");
+  }
+
+  bool isEqual = (yav.getSize() == v.getSize());
+
+  for (size_t i = 0; isEqual && i < v.getSize(); ++i)
+  {
+    try
+    {
+      isEqual = v.at(i) == yav.at(i);
+    }
+    catch(...)
+    {
+      return false;
+    }
+  }
+  return isEqual;
+}
+
+
 int main()
 {
   using test_t = bool(*)(const char **);
@@ -102,7 +170,10 @@ int main()
     { testPushBackOnEmptyVector, "Size of empty vector after pushBack must be 1" },
     { testPushBackOnNonEmptyVector, "Size of non-empty vector after pushBack must increase" },
     { testPopBackOnEmptyVector, "PopBack on empty vector must throw exception" },
-    { testPopBackOnNonEmptyVector, "Size of non-empty vector after popBack must decrease" }
+    { testPopBackOnNonEmptyVector, "Size of non-empty vector after popBack must decrease" },
+    { testElementCheckedAccess, "Inbound access must return lvalue reference "},
+    { testElementCheckedOutOfBoundAccess, "Out of bound access must generate"},
+    { testCopyConstructor, "Copied vector must be equal to original" }
   };
 
   constexpr size_t count = sizeof(tests) / sizeof(case_t);
@@ -110,13 +181,26 @@ int main()
   for (size_t i = 0; i < count; ++i)
   {
     const char * testName = nullptr;
-    bool r = tests[i].first(&testName);
-    if (!r)
+    bool r = true;
+
+    try
     {
-      ++failed;
-      std::cout << "[FAIL] " << testName << "\n";
-      std::cout << "\t" << tests[i].second << "\n";
+      r = tests[i].first(&testName);
+      if (!r)
+      {
+        ++failed;
+        std::cout << "[FAIL] " << testName << "\n";
+        std::cout << "\t" << tests[i].second << "\n";
+      }
     }
+    catch(const std::logic_error& e)
+    {
+      std::cout << "[NOT RUN] " << testName << "\n";
+      std::cout << "\t" << "Reason: " << e.what() << "\n";
+      ++failed;
+      continue;
+    }
+
   }
   std::cout << "Summary: " << (count - failed) << " passed" << "\n";
   std::cout << "\t" << " " << count << " total" << "\n";

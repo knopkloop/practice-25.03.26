@@ -14,14 +14,19 @@ namespace knk
     explicit Vector(size_t size);
     Vector(size_t size, const T& value);
 
-    Vector(const Vector< T >& rhs) = delete;
+    Vector(const Vector< T >& rhs);
     Vector< T >& operator=(const Vector< T >& rhs) = delete;
+
+    T& operator[](size_t id) noexcept;
+    const T& operator[](size_t id) const noexcept;
+    T& at(size_t id);
+    const T& at(size_t id) const;
 
     bool isEmpty() const noexcept;
     size_t getSize() const noexcept;
     size_t getCapacity() const noexcept;
 
-    void pushBack(const T& rhs);
+    void pushBack(const T& val);
     void popBack();
 
   private:
@@ -60,6 +65,26 @@ knk::Vector< T >::Vector(size_t size, const T& value):
   }
 }
 
+template< class T>
+knk::Vector< T >::Vector(const Vector< T >& rhs):
+  Vector(rhs.getSize())
+{
+  for (size_t i = 0; i < rhs.getSize(); ++i)
+  {
+    data_[i] = rhs.data_[i];
+  }
+}
+
+template< class T >
+T& knk::Vector< T >::at(size_t id)
+{
+  if (getSize() < id)
+  {
+    return data_[id];
+  }
+  throw std::out_of_range("id out of bound");
+}
+
 template< class T >
 bool knk::Vector< T >::isEmpty() const noexcept
 {
@@ -79,7 +104,7 @@ size_t knk::Vector< T >::getCapacity() const noexcept
 }
 
 template< class T >
-void knk::Vector< T >::pushBack(const T& rhs)
+void knk::Vector< T >::pushBack(const T& val)
 {
   if (size_ == capacity_)
   {
@@ -93,7 +118,7 @@ void knk::Vector< T >::pushBack(const T& rhs)
         temp_data[i] = data_[i];
       }
 
-      temp_data[size_++] = rhs;
+      temp_data[size_++] = val;
     }
     catch(...)
     {
@@ -107,7 +132,7 @@ void knk::Vector< T >::pushBack(const T& rhs)
   }
   else
   {
-    data_[size_++] = rhs;
+    data_[size_++] = val;
   }
 }
 
