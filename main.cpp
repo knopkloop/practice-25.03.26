@@ -103,7 +103,6 @@ bool testElementCheckedAccess(const char ** pname)
   {
     return false;
   }
-  return false;
 }
 
 bool testElementCheckedOutOfBoundAccess(const char ** pname)
@@ -113,18 +112,17 @@ bool testElementCheckedOutOfBoundAccess(const char ** pname)
   try
   {
     v.at(0);
+    return false;
   }
   catch(const std::out_of_range &e)
   {
     const char* text = e.what();
     return !std::strcmp("id is out of bound", text);
-    return true;
   }
   catch(...)
   {
     return false;
   }
-  return false;
 }
 
 bool testElementCheckedConstAccess(const char ** pname)
@@ -152,18 +150,17 @@ bool testElementCheckedOutOfBoundConstAccess(const char ** pname)
   try
   {
     v.at(0);
+    return false;
   }
   catch(const std::out_of_range &e)
   {
     const char* text = e.what();
     return !std::strcmp("id is out of bound", text);
-    return true;
   }
   catch(...)
   {
     return false;
   }
-  return false;
 }
 
 bool testCopyConstructor(const char ** pname)
@@ -211,10 +208,10 @@ int main()
     { testPushBackOnNonEmptyVector, "Size of non-empty vector after pushBack must increase" },
     { testPopBackOnEmptyVector, "PopBack on empty vector must throw exception" },
     { testPopBackOnNonEmptyVector, "Size of non-empty vector after popBack must decrease" },
-    { testElementCheckedAccess, "Inbound access must return lvalue reference " },
-    { testElementCheckedOutOfBoundAccess, "Out of bound access must generate " },
-    { testElementCheckedConstAccess, "Same as testElementCheckedAccess, but const" },
-    { testElementCheckedOutOfBoundConstAccess, "Same as testElementOutOfBoundAccess, but const" },
+    { testElementCheckedAccess, "Inbound access must return lvalue reference or generate exception with specific text" },
+    { testElementCheckedOutOfBoundAccess, "Out of bound access must generate exception with specific text" },
+    { testElementCheckedConstAccess, "Same as inbound access, but const" },
+    { testElementCheckedOutOfBoundConstAccess, "Same as out of bound, but const" },
     { testCopyConstructor, "Copied vector must be equal to original" }
   };
 
@@ -223,7 +220,7 @@ int main()
   for (size_t i = 0; i < count; ++i)
   {
     const char * testName = nullptr;
-    bool r = true;
+    bool r = false;
 
     try
     {
