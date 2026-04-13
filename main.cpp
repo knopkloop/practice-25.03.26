@@ -367,38 +367,9 @@ bool testSwap(const char** pname)
   v2.pushBack(30);
 
   v1.swap(v2);
+  if (v1.getSize() != 3ull || v1[0] != 10 || v1[1] != 20 || v1[2] != 30) return false;
+  if (v2.getSize() != 2ull || v2[0] != 1  || v2[1] != 2)  return false;
 
-  if (v1.getSize() != 3ull)
-  {
-    return false;
-  }
-  try
-  {
-    if (v1.at(0) != 10 || v1.at(1) != 20 || v1.at(2) != 30)
-    {
-      return false;
-    }
-  }
-  catch(...)
-  {
-    return false;
-  }
-
-  if (v2.getSize() != 2)
-  {
-    return false;
-  }
-  try
-  {
-    if (v2.at(0) != 1 || v2.at(1) != 2)
-    {
-      return false;
-    }
-  }
-  catch(...)
-  {
-    return false;
-  }
   return true;
 }
 

@@ -35,14 +35,12 @@ namespace knk
     void pushFront(const T& val);
     void popBack();
 
-    //ДОПИСАТЬ ТЕСТЫ ДЛЯ ПЕРЕМЕЩЕНИЯ, КОПИРОВАНИЯ и swap + at и operator[]
-    //ДОПИСАТЬ ТЕСТЫ ДЛЯ PushFront
     //РЕАЛИЗОВАТЬ МЕТОДЫ И ПРОТЕСТИРОВАТЬ
-    void insert(size_t id, const T& t);
+    void insert(size_t id, const T& val);
     void insert(size_t id, const Vector< T >& rhs, size_t beg, size_t end);
     void erase(size_t id);
     void erase(size_t beg, size_t end);
-    //ИТЕРАТОРЫ
+
   private:
     T* data_;
     size_t size_, capacity_;
