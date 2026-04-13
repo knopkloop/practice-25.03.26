@@ -4,28 +4,28 @@
 
 using knk::Vector;
 
-bool testConstructAndDestruct(const char ** pname)
+bool testConstructAndDestruct(const char** pname)
 {
   *pname = __func__;
   knk::Vector< int > v;
   return true;
 }
 
-bool testDefaultVectorIsEmpty(const char ** pname)
+bool testDefaultVectorIsEmpty(const char** pname)
 {
   *pname = __func__;
   Vector< int > v;
   return v.isEmpty();
 }
 
-bool testSizeOfEmptyVector(const char ** pname)
+bool testSizeOfEmptyVector(const char** pname)
 {
   *pname = __func__;
   Vector< int > v;
   return !v.getSize();
 }
 
-bool testSizeOfNonEmptyVector(const char ** pname)
+bool testSizeOfNonEmptyVector(const char** pname)
 {
   *pname = __func__;
   constexpr size_t size = 2ull;
@@ -33,14 +33,14 @@ bool testSizeOfNonEmptyVector(const char ** pname)
   return v.getSize() == size;
 }
 
-bool testCapacityOfEmptyVector(const char ** pname)
+bool testCapacityOfEmptyVector(const char** pname)
 {
   *pname = __func__;
   Vector< int > v;
   return v.getCapacity() == 0ull;
 }
 
-bool testCapacityOfVectorAfterConstruct(const char ** pname)
+bool testCapacityOfVectorAfterConstruct(const char** pname)
 {
   *pname = __func__;
   constexpr size_t size = 5ull;
@@ -48,7 +48,7 @@ bool testCapacityOfVectorAfterConstruct(const char ** pname)
   return v.getCapacity() == size;
 }
 
-bool testPushBackOnEmptyVector(const char ** pname)
+bool testPushBackOnEmptyVector(const char** pname)
 {
   *pname = __func__;
   Vector< int > v;
@@ -56,7 +56,7 @@ bool testPushBackOnEmptyVector(const char ** pname)
   return v.getSize() == 1ull && !v.isEmpty();
 }
 
-bool testPushBackOnNonEmptyVector(const char ** pname)
+bool testPushBackOnNonEmptyVector(const char** pname)
 {
   *pname = __func__;
   constexpr size_t size = 5ull;
@@ -65,7 +65,26 @@ bool testPushBackOnNonEmptyVector(const char ** pname)
   return v.getSize() == size + 1;
 }
 
-bool testPopBackOnEmptyVector(const char ** pname)
+bool testPushFrontOnEmptyVector(const char** pname)
+{
+  *pname = __func__;
+  Vector< int > v;
+  constexpr int value = 2;
+  v.pushFront(value);
+  return v.getSize() == 1ull && v.at(0) == value;
+}
+
+bool testPushFrontOnNonEmptyVector(const char** pname)
+{
+  *pname = __func__;
+  constexpr size_t size = 5ull;
+  constexpr int value = 7;
+  Vector< int > v(5ull, 2);
+  v.pushFront(value);
+  return v.getSize() == size + 1 && v.at(0) == value;
+}
+
+bool testPopBackOnEmptyVector(const char** pname)
 {
   *pname = __func__;
   Vector< int > v;
@@ -80,7 +99,7 @@ bool testPopBackOnEmptyVector(const char ** pname)
   return false;
 }
 
-bool testPopBackOnNonEmptyVector(const char ** pname)
+bool testPopBackOnNonEmptyVector(const char** pname)
 {
   *pname = __func__;
   constexpr size_t size = 5ull;
@@ -89,7 +108,7 @@ bool testPopBackOnNonEmptyVector(const char ** pname)
   return v.getSize() == size - 1;
 }
 
-bool testElementCheckedAccess(const char ** pname)
+bool testElementCheckedAccess(const char** pname)
 {
   *pname = __func__;
   Vector< int > v;
@@ -105,7 +124,7 @@ bool testElementCheckedAccess(const char ** pname)
   }
 }
 
-bool testElementCheckedOutOfBoundAccess(const char ** pname)
+bool testElementCheckedOutOfBoundAccess(const char** pname)
 {
   *pname = __func__;
   Vector< int > v;
@@ -125,12 +144,11 @@ bool testElementCheckedOutOfBoundAccess(const char ** pname)
   }
 }
 
-bool testElementCheckedConstAccess(const char ** pname)
+bool testElementCheckedConstAccess(const char** pname)
 {
   *pname = __func__;
   Vector< int > v;
   v.pushBack(2);
-
   const Vector< int >& rv = v;
   try
   {
@@ -143,7 +161,7 @@ bool testElementCheckedConstAccess(const char ** pname)
   }
 }
 
-bool testElementCheckedOutOfBoundConstAccess(const char ** pname)
+bool testElementCheckedOutOfBoundConstAccess(const char** pname)
 {
   *pname = __func__;
   const Vector< int > v;
@@ -163,7 +181,7 @@ bool testElementCheckedOutOfBoundConstAccess(const char ** pname)
   }
 }
 
-bool testCopyConstructor(const char ** pname)
+bool testCopyConstructor(const char** pname)
 {
   *pname = __func__;
   Vector< int > v;
@@ -172,7 +190,7 @@ bool testCopyConstructor(const char ** pname)
 
   Vector< int > yav = v;
 
-  if(v.isEmpty() && yav.isEmpty())
+  if(v.isEmpty() || yav.isEmpty())
   {
     throw std::logic_error("Vectors is expected to be non-empty");
   }
@@ -204,8 +222,10 @@ int main()
     { testSizeOfNonEmptyVector, "Size of non-empty vector must be positive" },
     { testCapacityOfEmptyVector, "Empty vector capacity must be zero" },
     { testCapacityOfVectorAfterConstruct, "Capacity after construction must equal size" },
-    { testPushBackOnEmptyVector, "Size of empty vector after pushBack must be 1" },
+    { testPushBackOnEmptyVector, "Size of empty vector after pushBack must be equal 1" },
     { testPushBackOnNonEmptyVector, "Size of non-empty vector after pushBack must increase" },
+    { testPushFrontOnEmptyVector, "Size of empty vector after pushFront must be equal 1"},
+    { testPushFrontOnNonEmptyVector, "First element of non-empty vector after pushFront must be equal value and size must increase"},
     { testPopBackOnEmptyVector, "PopBack on empty vector must throw exception" },
     { testPopBackOnNonEmptyVector, "Size of non-empty vector after popBack must decrease" },
     { testElementCheckedAccess, "Inbound access must return lvalue reference or generate exception with specific text" },
@@ -221,16 +241,9 @@ int main()
   {
     const char * testName = nullptr;
     bool r = false;
-
     try
     {
       r = tests[i].first(&testName);
-      if (!r)
-      {
-        ++failed;
-        std::cout << "[FAIL] " << testName << "\n";
-        std::cout << "\t" << tests[i].second << "\n";
-      }
     }
     catch(const std::logic_error& e)
     {
@@ -238,6 +251,12 @@ int main()
       std::cout << "\t" << "Reason: " << e.what() << "\n";
       ++failed;
       continue;
+    }
+    if (!r)
+    {
+      ++failed;
+      std::cout << "[FAIL] " << testName << "\n";
+      std::cout << "\t" << tests[i].second << "\n";
     }
   }
   std::cout << "Summary: " << (count - failed) << " passed" << "\n";

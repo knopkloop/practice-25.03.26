@@ -35,7 +35,7 @@ namespace knk
     void pushFront(const T& val);
     void popBack();
 
-    //ДОПИСАТЬ ТЕСТЫ ДЛЯ ПЕРЕМЕЩЕНИЯ, КОПИРОВАНИЯ и swap
+    //ДОПИСАТЬ ТЕСТЫ ДЛЯ ПЕРЕМЕЩЕНИЯ, КОПИРОВАНИЯ и swap + at и operator[]
     //ДОПИСАТЬ ТЕСТЫ ДЛЯ PushFront
     //РЕАЛИЗОВАТЬ МЕТОДЫ И ПРОТЕСТИРОВАТЬ
     void insert(size_t id, const T& t);
@@ -227,7 +227,7 @@ template< class T >
 void knk::Vector< T >::pushFront(const T& val)
 {
   Vector< T > v(getSize() + 1);
-  v[0] = v;
+  v[0] = val;
   for (size_t i = 1; i < v.getSize(); ++i)
   {
     v[i] = (*this)[i - 1];
