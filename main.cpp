@@ -69,7 +69,7 @@ bool testPushBackRepeat(const char** pname)
 {
   *pname = __func__;
   Vector< int > v(10ull, 12);
-  size_t size = v.getSize();
+  const size_t size = v.getSize();
   constexpr int value = 17;
   constexpr size_t repeats = 5ull;
   v.pushBackRepeat(value, repeats);
@@ -222,6 +222,152 @@ bool testCopyConstructor(const char** pname)
   return isEqual;
 }
 
+bool testMoveConstructor(const char** pname)
+{
+  *pname = __func__;
+  Vector< int > v;
+  v.pushBack(1);
+  v.pushBack(2);
+  v.pushBack(3);
+
+  const size_t originalSize = v.getSize();
+
+  Vector< int > moved(std::move(v));
+
+  if (moved.getSize() != originalSize)
+  {
+    return false;
+  }
+  for (size_t i = 0; i < originalSize; ++i)
+  {
+    try
+    {
+      if (moved.at(i) != static_cast< int >(i) + 1)
+      {
+        return false;
+      }
+    }
+    catch(...)
+    {
+      return false;
+    }
+  }
+  return true;
+}
+
+bool testCopyAssignment(const char** pname)
+{
+  *pname = __func__;
+  Vector< int > v1;
+  v1.pushBack(10);
+  v1.pushBack(20);
+
+  Vector< int > v2;
+  v2.pushBack(99);
+
+  v2 = v1;
+
+  if (v2.getSize() != v1.getSize())
+  {
+    return false;
+  }
+  for (size_t i = 0; i < v1.getSize(); ++i)
+  {
+    try
+    {
+      if (v1.at(i) != v2.at(i))
+      {
+        return false;
+      }
+    }
+    catch(...)
+    {
+      return false;
+    }
+  }
+  return true;
+}
+
+bool testMoveAssignment(const char** pname)
+{
+  *pname = __func__;
+  Vector< int > v1;
+  v1.pushBack(100);
+  v1.pushBack(200);
+
+  Vector< int > v2;
+  v2.pushBack(1);
+
+  const size_t v1Size = v1.getSize();
+
+  v2 = std::move(v1);
+
+  if (v2.getSize() != v1Size)
+  {
+    return false;
+  }
+  try
+  {
+    if (v2.at(0) != 100 || v2.at(1) != 200)
+    {
+      return false;
+    }
+  }
+  catch(...)
+  {
+    return false;
+  }
+  return true;
+}
+
+bool testSwap(const char** pname)
+{
+  *pname = __func__;
+  Vector< int > v1;
+  v1.pushBack(1);
+  v1.pushBack(2);
+
+  Vector< int > v2;
+  v2.pushBack(10);
+  v2.pushBack(20);
+  v2.pushBack(30);
+
+  v1.swap(v2);
+
+  if (v1.getSize() != 3ull)
+  {
+    return false;
+  }
+  try
+  {
+    if (v1.at(0) != 10 || v1.at(1) != 20 || v1.at(2) != 30)
+    {
+      return false;
+    }
+  }
+  catch(...)
+  {
+    return false;
+  }
+
+  if (v2.getSize() != 2)
+  {
+    return false;
+  }
+  try
+  {
+    if (v2.at(0) != 1 || v2.at(1) != 2)
+    {
+      return false;
+    }
+  }
+  catch(...)
+  {
+    return false;
+  }
+  return true;
+}
+
 int main()
 {
   using test_t = bool(*)(const char **);
@@ -244,7 +390,11 @@ int main()
     { testElementCheckedOutOfBoundAccess, "Out of bound access must generate exception with specific text" },
     { testElementCheckedConstAccess, "Same as inbound access, but const" },
     { testElementCheckedOutOfBoundConstAccess, "Same as out of bound, but const" },
-    { testCopyConstructor, "Copied vector must be equal to original" }
+    { testCopyConstructor, "Copied vector must be equal to original" },
+    { testMoveConstructor, "Moved constructor must take ownership of data"},
+    { testCopyAssignment, "Copy assignment must takes vectors equal"},
+    { testMoveAssignment, "Move assignment must transfer ownership"},
+    { testSwap, "Swap must exchange contents of two vectors"}
   };
 
   constexpr size_t count = sizeof(tests) / sizeof(case_t);
