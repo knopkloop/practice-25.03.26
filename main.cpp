@@ -192,6 +192,40 @@ bool testElementCheckedOutOfBoundConstAccess(const char** pname)
   }
 }
 
+bool testBracketRead(const char** pname)
+{
+  *pname = __func__;
+  Vector<int> v;
+  v.pushBack(10);
+  v.pushBack(20);
+  v.pushBack(30);
+
+  return v[0] == 10 && v[1] == 20 && v[2] == 30;
+}
+
+bool testBracketWrite(const char** pname)
+{
+  *pname = __func__;
+  Vector<int> v(3, 0);
+
+  v[0] = 100;
+  v[1] = 200;
+  v[2] = 300;
+
+  return v[0] == 100 && v[1] == 200 && v[2] == 300;
+}
+
+bool testConstBracketRead(const char **pname)
+{
+  *pname = __func__;
+  Vector<int> v;
+  v.pushBack(42);
+  v.pushBack(77);
+
+  const Vector<int>& cv = v;
+  return cv[0] == 42 && cv[1] == 77;
+}
+
 bool testCopyConstructor(const char** pname)
 {
   *pname = __func__;
@@ -390,6 +424,9 @@ int main()
     { testElementCheckedOutOfBoundAccess, "Out of bound access must generate exception with specific text" },
     { testElementCheckedConstAccess, "Same as inbound access, but const" },
     { testElementCheckedOutOfBoundConstAccess, "Same as out of bound, but const" },
+    { testBracketRead, "Non-const operator[] must return correct values"},
+    { testBracketWrite, "Non-const operator[] must return modifiable lvalue reference"},
+    { testConstBracketRead, "Const operator[] must work on const vector reference"},
     { testCopyConstructor, "Copied vector must be equal to original" },
     { testMoveConstructor, "Moved constructor must take ownership of data"},
     { testCopyAssignment, "Copy assignment must takes vectors equal"},
