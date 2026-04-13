@@ -65,6 +65,17 @@ bool testPushBackOnNonEmptyVector(const char** pname)
   return v.getSize() == size + 1;
 }
 
+bool testPushBackRepeat(const char** pname)
+{
+  *pname = __func__;
+  Vector< int > v(10ull, 12);
+  size_t size = v.getSize();
+  constexpr int value = 17;
+  constexpr size_t repeats = 5ull;
+  v.pushBackRepeat(value, repeats);
+  return v.getSize() == size + repeats && v[size] == value;
+}
+
 bool testPushFrontOnEmptyVector(const char** pname)
 {
   *pname = __func__;
@@ -224,6 +235,7 @@ int main()
     { testCapacityOfVectorAfterConstruct, "Capacity after construction must equal size" },
     { testPushBackOnEmptyVector, "Size of empty vector after pushBack must be equal 1" },
     { testPushBackOnNonEmptyVector, "Size of non-empty vector after pushBack must increase" },
+    { testPushBackRepeat, "Size of vector after pushBackRepeat must increase on repeats count and first of the new elements must be equal value"},
     { testPushFrontOnEmptyVector, "Size of empty vector after pushFront must be equal 1"},
     { testPushFrontOnNonEmptyVector, "First element of non-empty vector after pushFront must be equal value and size must increase"},
     { testPopBackOnEmptyVector, "PopBack on empty vector must throw exception" },
