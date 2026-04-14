@@ -373,6 +373,45 @@ bool testSwap(const char** pname)
   return true;
 }
 
+bool testInsertSingle(const char** pname)
+{
+  *pname = __func__;
+  Vector< int > v;
+  v.pushBack(1);
+  v.pushBack(3);
+  try
+  {
+    v.insert(1, 2);
+    return v.getSize() == 3 && v[1] == 2;
+  }
+  catch(...)
+  {
+    return false;
+  }
+}
+
+bool testInsertSingleOutOfBound(const char** pname)
+{
+  *pname = __func__;
+  Vector< int > v;
+  v.pushBack(1);
+  try
+  {
+    v.insert(2, 99);
+    return false;
+  }
+  catch(const std::out_of_range &e)
+  {
+    const char* text = e.what();
+    return !std::strcmp("id is out of bound", text);
+  }
+  catch(...)
+  {
+    return false;
+  }
+}
+
+
 int main()
 {
   using test_t = bool(*)(const char **);
@@ -391,6 +430,8 @@ int main()
     { testPushFrontOnNonEmptyVector, "First element of non-empty vector after pushFront must be equal value and size must increase"},
     { testPopBackOnEmptyVector, "PopBack on empty vector must throw exception" },
     { testPopBackOnNonEmptyVector, "Size of non-empty vector after popBack must decrease" },
+    { testInsertSingle, "Insert of single element in vector must place element at id"},
+    { testInsertSingleOutOfBound, "Insert of single element must generate exception with specific text, if id is out of bound"},
     { testElementCheckedAccess, "Inbound access must return lvalue reference or generate exception with specific text" },
     { testElementCheckedOutOfBoundAccess, "Out of bound access must generate exception with specific text" },
     { testElementCheckedConstAccess, "Same as inbound access, but const" },
