@@ -308,4 +308,25 @@ void knk::Vector< T >::erase(size_t id)
   }
   swap(v);
 }
+
+template< class T >
+void knk::Vector< T >::erase(size_t beg, size_t end)
+{
+  if (beg > getSize() || end > getSize() || beg > end)
+  {
+    throw std::out_of_range("range out of bound");
+  }
+  size_t count = end - beg;
+  Vector< T > v(getSize() - count);
+  for(size_t i = 0; i < beg; ++i)
+  {
+    v[i] = (*this)[i];
+  }
+  for(size_t i = beg; i < v.getSize(); ++i)
+  {
+    v[i] = (*this)[i + count];
+  }
+  swap(v);
+}
+
 #endif
