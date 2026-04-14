@@ -243,4 +243,23 @@ void knk::Vector< T >::popBack()
   --size_;
 }
 
+template< class T >
+void knk::Vector< T >::insert(size_t id, const T& val)
+{
+  if (id > getSize())
+  {
+    throw std::out_of_range("id is out of bound");
+  }
+  Vector< T > v;
+  for(size_t i = 0; i < id; ++i)
+  {
+    v.pushBack((*this)[i]);
+  }
+  v.pushBack(val);
+  for(size_t i = id; i < getSize(); ++i)
+  {
+    v.pushBack((*this)[i]);
+  }
+  swap(v);
+}
 #endif
