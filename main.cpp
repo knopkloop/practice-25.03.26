@@ -486,6 +486,44 @@ bool testInsertRangeOutOfBound(const char** pname)
   }
 }
 
+bool testInsertIterRange(const char** pname)
+{
+  *pname = __func__;
+  Vector< int > v1;
+  v1.pushBack(1);
+  v1.pushBack(4);
+  v1.pushBack(5);
+  Vector< int > v2;
+  v2.pushBack(2);
+  v2.pushBack(3);
+  try
+  {
+    v1.insert(v1.begin() + 1, v2.cbegin(), v2.cend());
+    return v1.getSize() == 5 && v1[0] == 1 && v1[1] == 2 && v1[2] == 3 && v1[3] == 4 && v1[4] == 5;
+  }
+  catch(...)
+  {
+    return false;
+  }
+}
+
+bool testInsertIterValueRepeat(const char** pname)
+{
+  *pname = __func__;
+  Vector< int > v1;
+  v1.pushBack(1);
+  v1.pushBack(5);
+  try
+  {
+    v1.insert(v1.begin() + 1, 0, 3);
+    return v1.getSize() == 5 && v1[0] == 1 && v1[1] == 0 && v1[2] == 0 && v1[3] == 0 && v1[4] == 5;
+  }
+  catch(...)
+  {
+    return false;
+  }
+}
+
 bool testEraseSingle(const char** pname)
 {
   *pname = __func__;
@@ -591,6 +629,8 @@ int main()
     { testInsertRange, "Insert of range must copy elements from source range" },
     { testInsertRangeIdOutOfBound, "Insert of range must generate exception with specific text, if id out of bound" },
     { testInsertRangeOutOfBound, "Insert of range must generate exception with specific text, if range out of bound" },
+    { testInsertIterRange, "insert range using iterators must insert range at a position" },
+    { testInsertIterValueRepeat, "insert val repeat using iterators must insert k copies of val at a position" },
     { testEraseSingle, "Erase of single element must remove element at index and shift others" },
     { testEraseSingleOutOfBound, "Erase of single element must generate exception with specific text, if index >= size" },
     { testEraseRange, "Erase of range must remove elements on [beg; end)" },
