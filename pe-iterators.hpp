@@ -178,7 +178,7 @@ bool knk::VIter< T >::operator==(const VIter< T >& other) const noexcept
 template< class T >
 bool knk::VIter< T >::operator!=(const VIter< T >& other) const noexcept
 {
-  return ptr_ != other.ptr_;
+  return !(*this == other);
 }
 
 template< class T >
@@ -308,7 +308,7 @@ bool knk::VCIter< T >::operator==(const VCIter< T >& other) const noexcept
 template< class T >
 bool knk::VCIter< T >::operator!=(const VCIter< T >& other) const noexcept
 {
-  return ptr_ != other.ptr_;
+  return !(*this == other);
 }
 
 template< class T >
