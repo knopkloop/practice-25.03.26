@@ -470,8 +470,7 @@ knk::VIter< T > knk::Vector< T >::erase(VIter< T > begin, VIter< T > end)
     return begin;
   }
   size_t b = begin.id_;
-  size_t e = end.id_;
-  erase(b, e);
+  erase(b, end.id_);
   return iter(b);
 }
 

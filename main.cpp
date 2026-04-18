@@ -579,11 +579,47 @@ bool testInsertIterRange(const char** pname)
 bool testInsertIterValueRepeat(const char** pname)
 {
   *pname = __func__;
-  Vector< int > v1;
-  v1.pushBack(1);
-  v1.pushBack(5);
-  auto it = v1.insert(v1.iter(1), 0, 3);
-  return *it == 0 && it == v1.iter(1) && v1.getSize() == 5 && v1[0] == 1 && v1[1] == 0 && v1[2] == 0 && v1[3] == 0 && v1[4] == 5;
+  Vector< int > v;
+  v.pushBack(1);
+  v.pushBack(5);
+  auto it = v.insert(v.iter(1), 0, 3);
+  return *it == 0 && it == v.iter(1) && v.getSize() == 5 && v[0] == 1 && v[1] == 0 && v[2] == 0 && v[3] == 0 && v[4] == 5;
+}
+
+bool testEraseIterSingle(const char** pname)
+{
+  *pname = __func__;
+  Vector< int > v;
+  v.pushBack(1);
+  v.pushBack(2);
+  v.pushBack(5);
+  v.pushBack(7);
+  auto it = v.erase(v.iter(2));
+  return *it == 7 && it == v.iter(2) && v.getSize() == 3 && v[0] == 1 && v[1] == 2;
+}
+
+bool testEraseIterRange(const char** pname)
+{
+  *pname = __func__;
+  Vector< int > v;
+  for (int val = 1; val < 8; ++val)
+  {
+    v.pushBack(val);
+  }
+  auto it = v.erase(v.iter(2), v.iter(5));
+  return *it == 6 && it == v.iter(2) && v.getSize() == 4 && v[0] == 1 && v[1] == 2 && v[2] == 6 && v[3] == 7;
+}
+
+bool testEraseIterRepeat(const char** pname)
+{
+  *pname = __func__;
+  Vector< int > v;
+  for (int val = 1; val < 8; ++val)
+  {
+    v.pushBack(val);
+  }
+  auto it = v.erase(v.iter(2), 4);
+  return *it == 7 && it == v.iter(2) && v.getSize() == 3 && v[0] == 1 && v[1] == 2;
 }
 
 int main()
@@ -628,6 +664,9 @@ int main()
     { testInsertIterSingle, "Single insert with iterator must add element at a specific position and return an iterator to the inserted element" },
     { testInsertIterRange, "Range insert with iterator must insert range at a position and return an iterator to the first inserted element " },
     { testInsertIterValueRepeat, "Value-repeat insert with iterator must insert copies of val at a positon and return an iterator to the first inserted element" },
+    { testEraseIterSingle, "Single erase with iterator must delete element from a specific position and return an iterator to the next element after the deleted one "},
+    { testEraseIterRange, "Range erase with iterator must delete elements in range and return an iterator to the next element after the last one removed "},
+    { testEraseIterRepeat, "Repeat erase with iterator must delete multiple elements starting from a specific position and return an iterator to the next element after the last one removed" }
   };
 
   constexpr size_t count = sizeof(tests) / sizeof(case_t);
