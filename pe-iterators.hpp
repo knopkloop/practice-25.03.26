@@ -9,104 +9,78 @@ namespace knk
   class Vector;
 
   template< class T >
-  class VCIter;
-
-  template< class T >
   class VIter
   {
   public:
-    VIter(Vector< T >&vec, size_t id) noexcept;
+    VIter(Vector< T >&vec, size_t idx) noexcept;
     ~VIter() = default;
 
     T& operator*() const noexcept;
-    T* operator->() const noexcept;
-    T& operator[](size_t k) const noexcept;
 
     VIter& operator++() noexcept;
     VIter operator++(int) noexcept;
     VIter& operator--() noexcept;
     VIter operator--(int) noexcept;
 
-    VIter& operator+=(int n) noexcept;
-    VIter& operator-=(int n) noexcept;
-    VIter operator+(int n) const noexcept;
-    VIter operator-(int n) const noexcept;
-    int operator-(const VIter& other) const noexcept;
+    VIter& operator+=(size_t n) noexcept;
+    VIter& operator-=(size_t n) noexcept;
+    VIter operator+(size_t n) const noexcept;
+    VIter operator-(size_t n) const noexcept;
 
     bool operator==(const VIter& other) const noexcept;
     bool operator!=(const VIter& other) const noexcept;
-    bool operator<(const VIter& other) const noexcept;
-    bool operator>(const VIter& other) const noexcept;
-    bool operator<=(const VIter& other) const noexcept;
-    bool operator>=(const VIter& other) const noexcept;
 
   private:
-    friend class VCIter< T >;
-    T* ptr_;
+    friend class Vector< T >;
+    Vector< T >& vector_;
+    size_t id_;
   };
 
   template< class T >
   class VCIter
   {
   public:
-    VCIter(const Vector< T >&vec, size_t id) noexcept;
-    VCIter(const VIter< T >& other) noexcept;
+    VCIter(const Vector< T >&vec, size_t idx) noexcept;
     ~VCIter() = default;
 
     const T& operator*() const noexcept;
-    const T* operator->() const noexcept;
-    const T& operator[](size_t k) const noexcept;
 
     VCIter& operator++() noexcept;
     VCIter operator++(int) noexcept;
     VCIter& operator--() noexcept;
     VCIter operator--(int) noexcept;
 
-    VCIter& operator+=(int n) noexcept;
-    VCIter& operator-=(int n) noexcept;
-    VCIter operator+(int n) const noexcept;
-    VCIter operator-(int n) const noexcept;
-    int operator-(const VCIter& other) const noexcept;
+    VCIter& operator+=(size_t n) noexcept;
+    VCIter& operator-=(size_t n) noexcept;
+    VCIter operator+(size_t n) const noexcept;
+    VCIter operator-(size_t n) const noexcept;
 
     bool operator==(const VCIter& other) const noexcept;
     bool operator!=(const VCIter& other) const noexcept;
-    bool operator<(const VCIter& other) const noexcept;
-    bool operator>(const VCIter& other) const noexcept;
-    bool operator<=(const VCIter& other) const noexcept;
-    bool operator>=(const VCIter& other) const noexcept;
 
   private:
-    const T* ptr_;
+    friend class Vector< T >;
+    const Vector< T >& vector_;
+    size_t id_;
   };
 }
 
 template< class T >
-knk::VIter< T >::VIter(Vector< T >& vec, size_t id) noexcept:
-  ptr_(&vec[id])
+knk::VIter< T >::VIter(Vector< T >& vec, size_t idx) noexcept:
+  vector_(vec),
+  id_(idx)
 {}
 
 template< class T >
 T& knk::VIter< T >::operator*() const noexcept
 {
-  return *ptr_;
-}
-
-template< class T >
-T* knk::VIter< T >::operator->() const noexcept
-{
-  return ptr_;
-}
-
-template< class T >
-T& knk::VIter< T >::operator[](size_t k) const noexcept
-{
-  return ptr_[k];
+  return vector_[id_];
 }
 
 template< class T >
 knk::VIter< T >& knk::VIter< T >::operator++() noexcept
 {
-  ++ptr_;
+  ++id_;
   return *this;
 }
 
@@ -114,14 +88,14 @@ template< class T >
 knk::VIter< T > knk::VIter< T >::operator++(int) noexcept
 {
   VIter< T > tmp = *this;
-  ++ptr_;
+  ++id_;
   return tmp;
 }
 
 template< class T >
 knk::VIter< T >& knk::VIter< T >::operator--() noexcept
 {
-  --ptr_;
+  --id_;
   return *this;
 }
 
@@ -129,26 +103,26 @@ template< class T >
 knk::VIter< T > knk::VIter< T >::operator--(int) noexcept
 {
   VIter< T > tmp = *this;
-  --ptr_;
+  --id_;
   return tmp;
 }
 
 template< class T >
-knk::VIter< T >& knk::VIter< T >::operator+=(int n) noexcept
+knk::VIter< T >& knk::VIter< T >::operator+=(size_t n) noexcept
 {
-  ptr_ += n;
+  id_ += n;
   return *this;
 }
 
 template< class T >
-knk::VIter< T >& knk::VIter< T >::operator-=(int n) noexcept
+knk::VIter< T >& knk::VIter< T >::operator-=(size_t n) noexcept
 {
-  ptr_ -= n;
+  id_ -= n;
   return *this;
 }
 
 template< class T >
-knk::VIter< T > knk::VIter< T >::operator+(int n) const noexcept
+knk::VIter< T > knk::VIter< T >::operator+(size_t n) const noexcept
 {
   VIter< T > tmp = *this;
   tmp += n;
@@ -156,7 +130,7 @@ knk::VIter< T > knk::VIter< T >::operator+(int n) const noexcept
 }
 
 template< class T >
-knk::VIter< T > knk::VIter< T >::operator-(int n) const noexcept
+knk::VIter< T > knk::VIter< T >::operator-(size_t n) const noexcept
 {
   VIter< T > tmp = *this;
   tmp -= n;
@@ -164,79 +138,33 @@ knk::VIter< T > knk::VIter< T >::operator-(int n) const noexcept
 }
 
 template< class T >
-int knk::VIter< T >::operator-(const VIter< T >& other) const noexcept
-{
-  return static_cast< int >(ptr_ - other.ptr_);
-}
-
-template< class T >
 bool knk::VIter< T >::operator==(const VIter< T >& other) const noexcept
 {
-  return ptr_ == other.ptr_;
+  return vector_ == other.vector_ && id_ == other.id_;
 }
 
 template< class T >
-bool knk::VIter< T >::operator!=(const VIter< T >& other) const noexcept
+bool knk::VIter< T >::operator!=(const VIter< T >&other) const noexcept
 {
   return !(*this == other);
 }
 
 template< class T >
-bool knk::VIter< T >::operator<(const VIter< T >& other) const noexcept
-{
-  return ptr_ < other.ptr_;
-}
-
-template< class T >
-bool knk::VIter< T >::operator>(const VIter< T >& other) const noexcept
-{
-  return ptr_ > other.ptr_;
-}
-
-template< class T >
-bool knk::VIter< T >::operator<=(const VIter< T >& other) const noexcept
-{
-  return ptr_ <= other.ptr_;
-}
-
-template< class T >
-bool knk::VIter< T >::operator>=(const VIter< T >& other) const noexcept
-{
-  return ptr_ >= other.ptr_;
-}
-
-template< class T >
-knk::VCIter< T >::VCIter(const Vector< T >& vec, size_t id) noexcept:
-  ptr_(&vec[id])
-{}
-
-template< class T >
-knk::VCIter< T >::VCIter(const VIter< T >& other) noexcept:
-  ptr_(other.ptr_)
+knk::VCIter< T >::VCIter(const Vector< T >& vec, size_t idx) noexcept:
+  vector_(vec),
+  id_(idx)
 {}
 
 template< class T >
 const T& knk::VCIter< T >::operator*() const noexcept
 {
-  return *ptr_;
-}
-
-template< class T >
-const T* knk::VCIter< T >::operator->() const noexcept
-{
-  return ptr_;
-}
-
-template< class T >
-const T& knk::VCIter< T >::operator[](size_t k) const noexcept
-{
-  return ptr_[k];
+  return vector_[id_];
 }
 
 template< class T >
 knk::VCIter< T >& knk::VCIter< T >::operator++() noexcept
 {
-  ++ptr_;
+  ++id_;
   return *this;
 }
 
@@ -244,14 +172,14 @@ template< class T >
 knk::VCIter< T > knk::VCIter< T >::operator++(int) noexcept
 {
   VCIter< T > tmp = *this;
-  ++ptr_;
+  ++id_;
   return tmp;
 }
 
 template< class T >
 knk::VCIter< T >& knk::VCIter< T >::operator--() noexcept
 {
-  --ptr_;
+  --id_;
   return *this;
 }
 
@@ -259,26 +187,26 @@ template< class T >
 knk::VCIter< T > knk::VCIter< T >::operator--(int) noexcept
 {
   VCIter< T > tmp = *this;
-  --ptr_;
+  --id_;
   return tmp;
 }
 
 template< class T >
-knk::VCIter< T >& knk::VCIter< T >::operator+=(int n) noexcept
+knk::VCIter< T >& knk::VCIter< T >::operator+=(size_t n) noexcept
 {
-  ptr_ += n;
+  id_ += n;
   return *this;
 }
 
 template< class T >
-knk::VCIter< T >& knk::VCIter< T >::operator-=(int n) noexcept
+knk::VCIter< T >& knk::VCIter< T >::operator-=(size_t n) noexcept
 {
-  ptr_ -= n;
+  id_ -= n;
   return *this;
 }
 
 template< class T >
-knk::VCIter< T > knk::VCIter< T >::operator+(int n) const noexcept
+knk::VCIter< T > knk::VCIter< T >::operator+(size_t n) const noexcept
 {
   VCIter< T > tmp = *this;
   tmp += n;
@@ -286,7 +214,7 @@ knk::VCIter< T > knk::VCIter< T >::operator+(int n) const noexcept
 }
 
 template< class T >
-knk::VCIter< T > knk::VCIter< T >::operator-(int n) const noexcept
+knk::VCIter< T > knk::VCIter< T >::operator-(size_t n) const noexcept
 {
   VCIter< T > tmp = *this;
   tmp -= n;
@@ -294,45 +222,15 @@ knk::VCIter< T > knk::VCIter< T >::operator-(int n) const noexcept
 }
 
 template< class T >
-int knk::VCIter< T >::operator-(const VCIter< T >& other) const noexcept
-{
-  return static_cast< int >(ptr_ - other.ptr_);
-}
-
-template< class T >
 bool knk::VCIter< T >::operator==(const VCIter< T >& other) const noexcept
 {
-  return ptr_ == other.ptr_;
+  return vector_ == other.vector_ && id_ == other.id_;
 }
 
 template< class T >
 bool knk::VCIter< T >::operator!=(const VCIter< T >& other) const noexcept
 {
   return !(*this == other);
-}
-
-template< class T >
-bool knk::VCIter< T >::operator<(const VCIter< T >& other) const noexcept
-{
-  return ptr_ < other.ptr_;
-}
-
-template< class T >
-bool knk::VCIter< T >::operator>(const VCIter< T >& other) const noexcept
-{
-  return ptr_ > other.ptr_;
-}
-
-template< class T >
-bool knk::VCIter< T >::operator<=(const VCIter< T >& other) const noexcept
-{
-  return ptr_ <= other.ptr_;
-}
-
-template< class T >
-bool knk::VCIter< T >::operator>=(const VCIter< T >& other) const noexcept
-{
-  return ptr_ >= other.ptr_;
 }
 
 #endif
