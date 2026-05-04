@@ -22,15 +22,15 @@ namespace haliullin
     T& operator*() const noexcept;
     T* operator->() const noexcept;
 
-    VIter& operator++() noexcept;
-    VIter operator++(int) noexcept;
-    VIter& operator--() noexcept;
-    VIter operator--(int) noexcept;
+    VIter< T >& operator++() noexcept;
+    VIter< T > operator++(int) noexcept;
+    VIter< T >& operator--() noexcept;
+    VIter< T > operator--(int) noexcept;
 
-    VIter& operator+=(size_t n) noexcept;
-    VIter& operator-=(size_t n) noexcept;
-    VIter operator+(size_t n) const noexcept;
-    VIter operator-(size_t n) const noexcept;
+    VIter< T >& operator+=(size_t n) noexcept;
+    VIter< T >& operator-=(size_t n) noexcept;
+    VIter< T > operator+(size_t n) const noexcept;
+    VIter< T > operator-(size_t n) const noexcept;
     int operator-(const VIter< T >& other) const noexcept;
 
     size_t getId(const Vector< T >& vec) const noexcept;
@@ -59,15 +59,15 @@ namespace haliullin
     const T& operator*() const noexcept;
     const T* operator->() const noexcept;
 
-    VCIter& operator++() noexcept;
-    VCIter operator++(int) noexcept;
-    VCIter& operator--() noexcept;
-    VCIter operator--(int) noexcept;
+    VCIter< T >& operator++() noexcept;
+    VCIter< T > operator++(int) noexcept;
+    VCIter< T >& operator--() noexcept;
+    VCIter< T > operator--(int) noexcept;
 
-    VCIter& operator+=(size_t n) noexcept;
-    VCIter& operator-=(size_t n) noexcept;
-    VCIter operator+(size_t n) const noexcept;
-    VCIter operator-(size_t n) const noexcept;
+    VCIter< T >& operator+=(size_t n) noexcept;
+    VCIter< T >& operator-=(size_t n) noexcept;
+    VCIter< T > operator+(size_t n) const noexcept;
+    VCIter< T > operator-(size_t n) const noexcept;
     int operator-(const VCIter< T >& other) const noexcept;
 
     size_t getId(const Vector< T >& vec) const noexcept;
