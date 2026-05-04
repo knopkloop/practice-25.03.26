@@ -1,13 +1,13 @@
-#include "pe-vector.hpp"
+#include "vector.hpp"
 #include <iostream>
 #include <cstring>
 
-using knk::Vector;
+using haliullin::Vector;
 
 bool testConstructAndDestruct(const char** pname)
 {
   *pname = __func__;
-  knk::Vector< int > v;
+  haliullin::Vector< int > v;
   return true;
 }
 
